@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DOSSIER 394019764 // FRAUENTHAL, ARON J</title>
+<style>
+  :root{
+    --void:#080a0d; --paper:#0f1318; --panel:#141a20; --edge:#242c35;
+    --txt:#dfe6ee; --dim:#7c8894; --amber:#e0a53c; --red:#c8323f;
+    --green:#3f9e6b; --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px),
+      radial-gradient(120% 80% at 50% 0%,#12171d 0%,var(--void) 70%);
+    color:var(--txt); font:14px/1.62 var(--mono);
+    padding:0 14px 70px;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  /* ---------- progress ---------- */
+  #bar{
+    position:fixed;top:0;left:0;height:2px;width:0;z-index:60;
+    background:linear-gradient(90deg,var(--amber),var(--red));
+    box-shadow:0 0 10px rgba(224,165,60,.6);transition:width .1s linear;
+  }
+  .dossier{
+    max-width:900px;margin:26px auto 0;background:var(--paper);
+    border:1px solid var(--edge);box-shadow:0 0 0 1px #000, 0 30px 80px -30px #000;
+    position:relative;
+  }
+  .dossier::before,.dossier::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    border:1px solid rgba(224,165,60,.10);margin:5px;
+  }
+  .strip{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 20px;
+    background:#1a0d0f;border-bottom:1px solid #3a1a1e;
+    padding:8px 20px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#e0808a;
+  }
+  .strip b{color:#fff;font-weight:700}
+  .blink{animation:bl 1.6s steps(2) infinite}
+  @keyframes bl{50%{opacity:.25}}
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:40;display:flex;flex-wrap:wrap;gap:2px;
+    background:#0b0e12;border-bottom:1px solid var(--edge);padding:6px 10px;
+  }
+  nav a,nav button{
+    font:inherit;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--dim);background:none;border:1px solid transparent;border-radius:2px;
+    padding:4px 7px;cursor:pointer;text-decoration:none;transition:.15s;
+  }
+  nav a:hover,nav button:hover{color:var(--amber);border-color:#3a3020;background:#14100a}
+  nav .sp{flex:1}
+  nav .tool{color:var(--amber);border-color:#3a3020}
+  header{padding:26px 24px 20px;border-bottom:1px solid var(--edge);position:relative;overflow:hidden}
+  .eyebrow{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--amber)}
+  h1{
+    margin:8px 0 6px;font-size:clamp(24px,5.4vw,40px);letter-spacing:.04em;
+    line-height:1.05;font-weight:700;color:#fff;text-transform:uppercase;
+  }
+  h1 span{display:block;font-size:.42em;letter-spacing:.34em;color:var(--dim);margin-top:10px;font-weight:400}
+  .barcode{
+    height:34px;margin:16px 0 0;width:220px;opacity:.55;
+    background:repeating-linear-gradient(90deg,#c9d3dd 0 2px,transparent 2px 4px,#c9d3dd 4px 5px,transparent 5px 9px,#c9d3dd 9px 12px,transparent 12px 15px);
+  }
+  .stamp{
+    position:absolute;right:16px;top:24px;transform:rotate(-7deg);
+    border:2px solid var(--red);color:var(--red);padding:7px 13px;border-radius:3px;
+    font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;text-align:center;
+    line-height:1.35;opacity:.85;
+  }
+  .stamp b{display:block;font-size:13px;letter-spacing:.14em}
+  .fields{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    border-top:1px solid var(--edge);background:#0c1014;
+  }
+  .fields div{padding:11px 16px;border-right:1px solid var(--edge);border-bottom:1px solid var(--edge)}
+  .fields dt{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+  .fields dd{margin:3px 0 0;font-size:13px;color:#fff;font-weight:700;letter-spacing:.04em}
+  /* ---------- sections ---------- */
+  section{padding:22px 24px;border-bottom:1px solid var(--edge)}
+  h2{
+    margin:0 0 16px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--amber);display:flex;align-items:center;gap:12px;font-weight:700;
+    cursor:pointer;user-select:none;
+  }
+  h2 .num{background:var(--amber);color:#0b0d10;padding:2px 7px;border-radius:2px;letter-spacing:.1em;font-size:10.5px}
+  h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--edge),transparent)}
+  h2 .fold{
+    font:inherit;font-size:12px;line-height:1;color:var(--dim);background:none;
+    border:1px solid var(--edge);border-radius:2px;width:18px;height:18px;
+    display:grid;place-items:center;cursor:pointer;flex:none;
+  }
+  h2:hover .fold{color:var(--amber);border-color:#3a3020}
+  .sec-body{overflow:hidden;transition:opacity .25s}
+  section.collapsed .sec-body{display:none}
+  section.collapsed{padding-bottom:14px}
+  .lead{margin:0 0 16px;color:var(--dim);font-size:12.5px}
+  dl.grid{display:grid;grid-template-columns:190px 1fr;gap:7px 16px;margin:0}
+  dl.grid dt{color:var(--dim);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  dl.grid dd{margin:0;color:var(--txt)}
+  dd.hi{color:#fff;font-weight:700}
+  .redact{
+    display:inline-block;background:#000;border:1px dashed #39434d;
+    padding:0 8px;letter-spacing:.14em;color:#c8d4e0;cursor:pointer;
+    transition:.15s;font:inherit;
+  }
+  .redact:hover{border-color:var(--amber);color:var(--amber)}
+  .redact.open{background:#1a1408;border-style:solid;border-color:var(--amber);color:var(--amber)}
+  /* ---------- photo ---------- */
+  .ident{display:grid;grid-template-columns:168px 1fr;gap:22px;align-items:start}
+  .figure{margin:0;position:relative}
+  .plate{
+    border:1px solid #39434d;background:#05070a;padding:5px;position:relative;
+    box-shadow:inset 0 0 0 1px rgba(224,165,60,.14);cursor:zoom-in;
+  }
+  .plate img{
+    display:block;width:100%;height:auto;
+    filter:grayscale(1) contrast(1.1) brightness(.94);transition:filter .25s;
+  }
+  .plate.color img{filter:none}
+  .plate::before,.plate::after{
+    content:"";position:absolute;width:14px;height:14px;border:2px solid var(--amber);
+  }
+  .plate::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+  .plate::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+  .plate .tick{
+    position:absolute;bottom:5px;left:5px;right:5px;
+    background:rgba(4,6,9,.82);border-top:1px solid #39434d;
+    font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);
+    padding:3px 5px;display:flex;justify-content:space-between;
+  }
+  figcaption{
+    margin-top:7px;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:#5f6b77;line-height:1.7;
+  }
+  figcaption b{color:var(--dim);display:block}
+  .mono-toggle{
+    margin-top:6px;font:inherit;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
+    background:none;border:1px solid #39434d;color:#8b96a2;padding:3px 7px;cursor:pointer;
+  }
+  .mono-toggle:hover{color:var(--amber);border-color:var(--amber)}
+  /* ---------- tiles ---------- */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px}
+  .tile{border:1px solid var(--edge);background:var(--panel);padding:13px 14px;border-left:3px solid #39434d}
+  .tile .n{font-size:23px;font-weight:700;line-height:1;letter-spacing:-.02em;color:#fff;font-variant-numeric:tabular-nums}
+  .tile .l{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:7px}
+  .tile.g{border-left-color:var(--green)} .tile.g .n{color:var(--green)}
+  .tile.r{border-left-color:var(--red)} .tile.r .n{color:var(--red)}
+  /* ---------- filter bar ---------- */
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    border:1px solid var(--edge);background:#0c1014;padding:9px 11px;margin:0 0 16px;
+  }
+  .toolbar .lbl{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+  .toolbar input{
+    font:inherit;font-size:12px;background:#05070a;border:1px solid var(--edge);
+    color:var(--txt);padding:5px 8px;flex:1;min-width:130px;outline:none;
+  }
+  .toolbar input:focus{border-color:var(--amber)}
+  .toolbar button{
+    font:inherit;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    background:none;border:1px solid var(--edge);color:var(--dim);padding:4px 9px;cursor:pointer;
+  }
+  .toolbar button:hover{color:var(--amber);border-color:#3a3020}
+  .toolbar button.on{background:#1a1408;border-color:var(--amber);color:var(--amber)}
+  .count{margin-left:auto;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .empty{
+    border:1px dashed var(--edge);padding:16px;text-align:center;color:var(--dim);
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;display:none;
+  }
+  /* ---------- records ---------- */
+  .rec{border:1px solid var(--edge);margin:0 0 14px;background:var(--panel);transition:opacity .2s}
+  .rec:last-child{margin-bottom:0}
+  .rec .rh{
+    display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;
+    padding:10px 14px;background:#0c1014;border-bottom:1px solid var(--edge);
+  }
+  .rec .rh .id{font-weight:700;letter-spacing:.1em;color:#fff;font-size:13px}
+  .rec .rb{padding:14px}
+  .rec.bad{border-left:3px solid var(--red)}
+  .rec.ok{border-left:3px solid var(--green)}
+  .tag{
+    font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;padding:3px 9px;
+    border:1px solid currentColor;border-radius:2px;white-space:nowrap;font-weight:700;
+  }
+  .tag.ok{color:var(--green)} .tag.bad{color:var(--red)} .tag.neu{color:var(--dim)}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{
+    text-align:left;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--dim);padding:7px 9px;border-bottom:1px solid var(--edge);
+  }
+  th.sortable{cursor:pointer;user-select:none}
+  th.sortable:hover{color:var(--amber)}
+  th .dir{color:var(--amber);opacity:0}
+  th.sorted .dir{opacity:1}
+  td{padding:8px 9px;border-bottom:1px dotted #1e262e;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .hist{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+  .m{
+    width:29px;height:22px;display:grid;place-items:center;font-size:9px;
+    border:1px solid #232b34;color:#5c6874;background:#0c1014;
+  }
+  .m.ok{border-color:#20492f;background:#0d1f16;color:var(--green)}
+  .m.late{border-color:#4d1c22;background:#200d10;color:var(--red)}
+  /* ---------- review ---------- */
+  .review{border:1px solid #3a1a1e;background:linear-gradient(180deg,#150d0f,#0e1216 40%)}
+  .review h2{color:#e0808a}
+  .review h2 .num{background:#e0808a;color:#0b0d10}
+  .verdict{display:grid;grid-template-columns:118px 1fr;gap:18px;border:1px solid #3a1a1e;background:#120b0d;padding:16px;margin:0 0 20px}
+  .grade{border:2px solid var(--red);display:grid;place-items:center;text-align:center;padding:10px 4px;color:var(--red)}
+  .grade .g{font-size:44px;font-weight:700;line-height:1;letter-spacing:-.04em}
+  .grade.pop .g{animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+  @keyframes pop{0%{transform:scale(.6) rotate(-6deg);opacity:0}100%{transform:none;opacity:1}}
+  .grade .s{font-size:9px;letter-spacing:.18em;text-transform:uppercase;margin-top:5px}
+  .verdict .vtext{margin:0;font-size:13.5px;color:#e9d9db}
+  .verdict .vtext b{color:#fff;display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:7px}
+  .subhead{
+    font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);
+    margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--edge);
+  }
+  ul{margin:0;padding-left:18px}
+  li{margin:6px 0;color:#cfd8e2}
+  li::marker{color:var(--amber)}
+  .neg li::marker{color:var(--red)}
+  .pos li::marker{color:var(--green)}
+  .act{counter-reset:a;list-style:none;padding:0}
+  .act li{
+    counter-increment:a;position:relative;padding-left:34px;margin:10px 0;
+    border-bottom:1px dotted #1e262e;padding-bottom:10px;cursor:pointer;transition:.2s;
+  }
+  .act li::before{
+    content:counter(a,decimal-leading-zero);position:absolute;left:0;top:0;
+    color:var(--amber);font-weight:700;font-size:11px;letter-spacing:.1em;
+    border:1px solid #3a3020;background:#161209;padding:2px 6px;transition:.2s;
+  }
+  .act li:hover::before{border-color:var(--amber)}
+  .act li.done{color:#6d7a87}
+  .act li.done::before{content:"\2713";background:#0d1f16;border-color:#20492f;color:var(--green)}
+  .act li.done b{color:#8b96a2;text-decoration:line-through;text-decoration-color:#3f9e6b}
+  a{color:var(--amber)}
+  footer{padding:20px 24px 26px;font-size:10.5px;letter-spacing:.1em;color:#5f6b77;text-transform:uppercase;line-height:1.9}
+  footer .stamps{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+  footer .st{border:1px solid #39434d;padding:4px 10px;font-size:9.5px;letter-spacing:.18em;color:#6d7a87}
+  footer .st.red{border-color:var(--red);color:var(--red)}
+  /* ---------- lightbox ---------- */
+  #lb{
+    position:fixed;inset:0;z-index:80;background:rgba(3,5,8,.94);
+    display:none;place-items:center;padding:24px;
+  }
+  #lb.on{display:grid}
+  #lb figure{margin:0;max-width:min(440px,90vw);text-align:center}
+  #lb img{width:100%;border:1px solid #39434d;filter:grayscale(1) contrast(1.1)}
+  #lb.color img{filter:none}
+  #lb .ctl{display:flex;gap:8px;justify-content:center;margin-top:12px}
+  #lb button{
+    font:inherit;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+    background:none;border:1px solid #39434d;color:#a9b4c0;padding:6px 12px;cursor:pointer;
+  }
+  #lb button:hover{color:var(--amber);border-color:var(--amber)}
+  #toast{
+    position:fixed;bottom:18px;left:50%;transform:translate(-50%,20px);
+    background:#161209;border:1px solid var(--amber);color:var(--amber);
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    padding:8px 14px;z-index:90;opacity:0;pointer-events:none;transition:.25s;
+  }
+  #toast.on{opacity:1;transform:translate(-50%,0)}
+  @media print{
+    body{background:#fff;color:#111;padding:0}
+    .dossier{box-shadow:none;border-color:#bbb;margin:0}
+    section,.rec,.figure{break-inside:avoid}
+    nav,#bar,#lb,#toast,.toolbar,.fold,.mono-toggle{display:none!important}
+    section.collapsed .sec-body{display:block!important}
+    .strip{background:#eee;color:#a00;border-color:#ccc}
+    h1{color:#000} .tile,.rec,.fields{background:#f6f7f9}
+    .act li.done b{text-decoration:none}
+  }
+  @media (max-width:640px){
+    .ident{grid-template-columns:1fr}
+    dl.grid{grid-template-columns:1fr;gap:2px 0}
+    dl.grid dt{margin-top:9px}
+    .figure{max-width:190px}
+    .stamp{position:static;display:inline-block;margin-top:14px;transform:none}
+    .verdict{grid-template-columns:1fr}
+    nav{font-size:9px}
+  }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<div class="dossier">
+
+  <div class="strip">
+    <span><b>Classification:</b> Confidential</span>
+    <span class="blink">&#9679; Active File</span>
+    <span><b>Bureau:</b> TransUnion</span>
+  </div>
+
+  <nav aria-label="Section navigation">
+    <a href="#s1">01</a><a href="#s2">02</a><a href="#s3">03</a><a href="#s5">05</a>
+    <a href="#s6">06</a><a href="#s7">07</a><a href="#s9">09</a><a href="#s10">10</a>
+    <span class="sp"></span>
+    <button class="tool" id="expandAll" title="Expand all sections">Expand</button>
+    <button class="tool" id="collapseAll" title="Collapse all sections">Fold</button>
+    <button class="tool" id="printBtn" title="Print or save as PDF">Print</button>
+  </nav>
+
+  <header>
+    <div class="eyebrow">Consumer Credit Dossier &mdash; Bureau Extract</div>
+    <h1>Aron J Frauenthal<span>Subject File &middot; Tallahassee, FL</span></h1>
+    <div class="barcode" aria-hidden="true"></div>
+    <div class="stamp"><b>Reviewed</b>Credit Analysis<br>Eyes Only</div>
+  </header>
+
+  <div class="fields">
+    <div><dt>File No.</dt><dd>394019764</dd></div>
+    <div><dt>Extract Date</dt><dd>11.16.2026</dd></div>
+    <div><dt>SSN</dt><dd>XXX-XX-1731</dd></div>
+    <div><dt>DOB</dt><dd>08.11.2003</dd></div>
+    <div><dt>Score On File</dt><dd>NONE</dd></div>
+  </div>
+
+  <section id="s1">
+    <h2><span class="num">01</span>Summary Readout<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <p class="lead">Aggregate counts pulled from the extract. No credit score was supplied with this file.</p>
+      <div class="tiles">
+        <div class="tile"><div class="n" data-count="5">0</div><div class="l">Trade Lines</div></div>
+        <div class="tile g"><div class="n" data-count="3">0</div><div class="l">Satisfactory</div></div>
+        <div class="tile r"><div class="n" data-count="2">0</div><div class="l">Derogatory</div></div>
+        <div class="tile r"><div class="n" data-count="1334" data-pre="$">$0</div><div class="l">Live Balance</div></div>
+        <div class="tile"><div class="n" data-count="8">0</div><div class="l">Inquiries</div></div>
+        <div class="tile"><div class="n" data-count="0">0</div><div class="l">Open Disputes</div></div>
+      </div>
+      <p class="lead" style="margin:16px 0 0">
+        Three trade lines report clean history and sit at $0. One wireless charge-off remains the sole unpaid
+        balance on file. One auto loan was settled short after two consecutive 30-day delinquencies.
+      </p>
+    </div>
+  </section>
+
+  <section id="s2">
+    <h2><span class="num">02</span>Subject Identity<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <div class="ident">
+        <figure class="figure">
+          <div class="plate" id="plate" title="Click to enlarge">
+            <img id="photo" alt="Subject photograph, Aron J Frauenthal"
+                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJDBSvaeL8ff4EvXlVaUnDJjW41InX-bB_r-MMFkQFJA&s=10"
+                 onerror="this.onerror=null;this.src='subject.jpg'">
+            <div class="tick"><span>SUBJ</span><span>394019764</span></div>
+          </div>
+          <figcaption><b>Fig. 1 &mdash; Subject</b>Frontal, neutral expression<br>Captured 11.16.2026</figcaption>
+          <button class="mono-toggle" id="monoBtn">Mono / Color</button>
+        </figure>
+        <dl class="grid">
+          <dt>Primary Name</dt><dd class="hi">FRAUENTHAL, ARON J</dd>
+          <dt>Name Variants</dt><dd>ARON J FRAUENTHAL JR &middot; ARON FRAUENTHAL JR &middot; FRAUENTHAL, ARON &middot; FRAUENTHAL, ARON, J</dd>
+          <dt>Date of Birth</dt><dd class="hi">08.11.2003</dd>
+          <dt>SSN</dt><dd><button class="redact" id="ssn" data-full="772-22-1731">XXX-XX-1731</button> <span style="color:var(--dim);font-size:11px">&larr; click</span></dd>
+          <dt>Residence</dt><dd class="hi">837 BLUE BOAR CT<br>TALLAHASSEE, FL 32310-8284</dd>
+          <dt>Reported Since</dt><dd>08.20.2023</dd>
+          <dt>Phone &mdash; Mobile</dt><dd>(850) 354-3992</dd>
+          <dt>Phone &mdash; Secondary</dt><dd>(448) 666-4039 <span style="color:var(--dim)">[public records]</span></dd>
+          <dt>Driver License</dt><dd>FL F244793888000 &middot; FL F653010032910</dd>
+          <dt>Electronic Mail</dt><dd>afrauenthal@juno.com</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <h2><span class="num">03</span>Declared Employment<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <table>
+        <tr><th>Employer</th><th>Last Verified</th></tr>
+        <tr><td>BOM BOM LLC</td><td>01.15.2025</td></tr>
+        <tr><td>CLOUD SMOKE SHOP</td><td>07.07.2024</td></tr>
+      </table>
+      <p class="lead" style="margin:12px 0 0">No hire dates, income figures, or position titles reported.</p>
+    </div>
+  </section>
+
+  <section id="s4">
+    <h2><span class="num">04</span>Rating Legend<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <table>
+        <tr><td><b>OK</b></td><td>Current &mdash; paid as agreed</td></tr>
+        <tr><td><b>N/R</b></td><td>Not reported</td></tr>
+        <tr><td><b>30 / 60 / 90 / 120</b></td><td>Days past due</td></tr>
+        <tr><td><b>COL / C/O</b></td><td>Collection / charged off</td></tr>
+        <tr><td><b>VS / RPO</b></td><td>Voluntary surrender / repossession</td></tr>
+      </table>
+      <p class="lead" style="margin:12px 0 0">Status reflects current standing, or last standing on closed accounts.</p>
+    </div>
+  </section>
+
+  <section id="s5">
+    <h2><span class="num">05</span>Trade Line Register<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <div class="toolbar">
+        <span class="lbl">Filter</span>
+        <button data-filter="all" class="on">All</button>
+        <button data-filter="ok">Satisfactory</button>
+        <button data-filter="bad">Adverse</button>
+        <input id="q" type="search" placeholder="Search creditor, city, remark…  ( / )" aria-label="Search records">
+        <span class="count" id="count" aria-live="polite"></span>
+      </div>
+
+      <div class="rec ok" data-kind="ok">
+        <div class="rh"><span class="id">SECURED CARD &middot; &middot;&middot;&middot;&middot; A532</span><span class="tag ok">Current / Open</span></div>
+        <div class="rb">
+          <dl class="grid">
+            <dt>Creditor</dt><dd>217 Centre St, New York, NY 10013 &middot; (888) 851-1172</dd>
+            <dt>Opened</dt><dd>08.02.2025</dd>
+            <dt>Responsibility</dt><dd>Individual</dd>
+            <dt>Type</dt><dd>Open account &middot; Secured credit card</dd>
+            <dt>Balance / High</dt><dd>$0 / $0</dd>
+            <dt>Terms</dt><dd>$0 monthly &middot; $0 payment</dd>
+            <dt>Past Due</dt><dd>$0</dd>
+            <dt>Last Updated</dt><dd>10.31.2026</dd>
+            <dt>Worst Status</dt><dd>Current</dd>
+            <dt>Delinquencies</dt><dd>30d 0 &middot; 60d 0 &middot; 90d+ 0</dd>
+            <dt>Remarks</dt><dd>None</dd>
+          </dl>
+          <div class="hist" aria-label="Payment history">
+            <span class="m">N/R</span><span class="m">N/R</span><span class="m">N/R</span>
+            <span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span>
+            <span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span>
+            <span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rec ok" data-kind="ok">
+        <div class="rh"><span class="id">CHIME-STRIDE &middot; &middot;&middot;&middot;&middot; 4836</span><span class="tag ok">Current / Open</span></div>
+        <div class="rb">
+          <dl class="grid">
+            <dt>Creditor</dt><dd>PO Box 417, San Francisco, CA 94104 &middot; (844) 244-6363</dd>
+            <dt>Opened</dt><dd>06.29.2023</dd>
+            <dt>Responsibility</dt><dd>Individual</dd>
+            <dt>Type</dt><dd>Open account &middot; Secured credit card</dd>
+            <dt>Balance / High</dt><dd>$0 / $408</dd>
+            <dt>Terms</dt><dd>$0 monthly &middot; $0 payment</dd>
+            <dt>Last Payment</dt><dd>01.01.2025</dd>
+            <dt>Past Due</dt><dd>$0</dd>
+            <dt>Last Updated</dt><dd>10.03.2026</dd>
+            <dt>Worst Status</dt><dd>Current</dd>
+            <dt>Delinquencies</dt><dd>30d 0 &middot; 60d 0 &middot; 90d+ 0</dd>
+            <dt>Remarks</dt><dd>None &mdash; 39 months, all OK</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="rec ok" data-kind="ok">
+        <div class="rh"><span class="id">FIRST FL CU &middot; &middot;&middot;&middot;&middot; 0001</span><span class="tag neu">Closed / Paid</span></div>
+        <div class="rb">
+          <dl class="grid">
+            <dt>Creditor</dt><dd>500 W 1st St, Jacksonville, FL 32202 &middot; (904) 359-6800</dd>
+            <dt>Opened / Closed</dt><dd>08.21.2023 &middot; 03.11.2025</dd>
+            <dt>Responsibility</dt><dd>Joint</dd>
+            <dt>Type</dt><dd>Installment &middot; Unsecured loan</dd>
+            <dt>Balance / High</dt><dd>$0 / $3,000</dd>
+            <dt>Terms</dt><dd>$0 monthly &middot; 36 months</dd>
+            <dt>Last Payment</dt><dd>03.11.2025</dd>
+            <dt>Past Due</dt><dd>$0</dd>
+            <dt>Last Updated</dt><dd>03.11.2025</dd>
+            <dt>Worst Status</dt><dd>Current</dd>
+            <dt>Delinquencies</dt><dd>30d 0 &middot; 60d 0 &middot; 90d+ 0</dd>
+            <dt>Remarks</dt><dd>CLO &mdash; Closed</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="rec bad" data-kind="bad">
+        <div class="rh"><span class="id">VERIZON &middot; &middot;&middot;&middot;&middot; 0001</span><span class="tag bad">Collection / Charge-off</span></div>
+        <div class="rb">
+          <dl class="grid">
+            <dt>Creditor</dt><dd>Verizon Wireless, PO Box 650051, Dallas, TX 75265 &middot; (800) 852-1922</dd>
+            <dt>Opened / Closed</dt><dd>11.19.2023 &middot; 12.04.2024</dd>
+            <dt>Responsibility</dt><dd>Individual</dd>
+            <dt>Type</dt><dd>Open account &middot; Telecommunications / cellular</dd>
+            <dt>Balance / High</dt><dd class="hi">$1,334 / $1,334</dd>
+            <dt>Past Due</dt><dd class="hi">$1,334</dd>
+            <dt>Pay Status</dt><dd>Collection / Chargeoff</dd>
+            <dt>Last Payment</dt><dd>08.31.2024</dd>
+            <dt>Last Updated</dt><dd>10.09.2026</dd>
+            <dt>Worst Status</dt><dd>Unknown</dd>
+            <dt>Delinquencies</dt><dd>30d 0 &middot; 60d 0 &middot; 90d+ 0</dd>
+            <dt>Remarks</dt><dd>09B &mdash; Collection account &middot; CLA &mdash; Placed for collection</dd>
+            <dt>Monthly History</dt><dd>Not supplied for this account</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="rec bad" data-kind="bad">
+        <div class="rh"><span class="id">CREDITACPT &middot; &middot;&middot;&middot;&middot; 0431</span><span class="tag bad">Settled / 60 Days Late</span></div>
+        <div class="rb">
+          <dl class="grid">
+            <dt>Creditor</dt><dd>PO Box 5070, Credit Dispute Dept, Southfield, MI 48086 &middot; (248) 353-2700</dd>
+            <dt>Opened / Closed</dt><dd>02.14.2024 &middot; 02.19.2025</dd>
+            <dt>Responsibility</dt><dd>Joint</dd>
+            <dt>Type</dt><dd>Installment &middot; Auto loan</dd>
+            <dt>Balance / High</dt><dd>$0 / $13,419</dd>
+            <dt>Terms</dt><dd>$0 monthly &middot; 66 months</dd>
+            <dt>Last Payment</dt><dd>02.19.2025</dd>
+            <dt>Past Due</dt><dd>$0</dd>
+            <dt>Pay Status</dt><dd>Late 60 days</dd>
+            <dt>Worst Status</dt><dd>Late 60 days</dd>
+            <dt>Delinquencies</dt><dd>30d 2 &middot; 60d 0 &middot; 90d+ 0</dd>
+            <dt>Remarks</dt><dd>SET &mdash; Settled for less than full balance</dd>
+          </dl>
+          <div class="hist" aria-label="Payment history">
+            <span class="m">N/R</span><span class="m">N/R</span><span class="m">N/R</span><span class="m">N/R</span><span class="m">N/R</span>
+            <span class="m">N/R</span><span class="m">N/R</span><span class="m">N/R</span><span class="m">N/R</span>
+            <span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span>
+            <span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span><span class="m ok">OK</span>
+            <span class="m ok">OK</span><span class="m late">30</span><span class="m late">30</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty" id="empty">No records match that filter.</div>
+    </div>
+  </section>
+
+  <section id="s7">
+    <h2><span class="num">07</span>Inquiry Log<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <p class="lead">Source data carries no authoritative hard / account-review classification. Type codes shown as supplied. Click a column head to sort.</p>
+      <table id="inq">
+        <thead>
+          <tr>
+            <th class="sortable" data-col="0">Date <span class="dir">&#9650;</span></th>
+            <th class="sortable" data-col="1">Inquirer <span class="dir">&#9650;</span></th>
+            <th class="sortable" data-col="2">Location <span class="dir">&#9650;</span></th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>09.21.2025</td><td>Capital One</td><td>15000 Capital One, Richmond, VA 23238</td><td>Bank / I</td></tr>
+          <tr><td>05.12.2025</td><td>CPS</td><td>19500 Jamboree Rd, Irvine, CA 92612</td><td>Finance / I</td></tr>
+          <tr><td>04.25.2025</td><td>Capital One</td><td>15000 Capital One, Richmond, VA 23238</td><td>Bank / I</td></tr>
+          <tr><td>02.13.2025</td><td>Flagship Credit</td><td>3 Christy Dr, Chadds Ford, PA 19317</td><td>Finance / I</td></tr>
+          <tr><td>02.13.2025</td><td>OneMain</td><td>PO Box 3327, Evansville, IN 47706</td><td>Finance / I</td></tr>
+          <tr><td>02.13.2025</td><td>Prestige Financial</td><td>351 W Opportunity, Draper, UT 84020</td><td>Finance / I</td></tr>
+          <tr><td>02.13.2025</td><td>CPS</td><td>19500 Jamboree Rd, Irvine, CA 92612</td><td>Finance / I</td></tr>
+          <tr><td>02.13.2025</td><td>Agora Data</td><td>700 W Arkansas Ste 150, Arlington, TX 76013</td><td>Finance / I</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="s8">
+    <h2><span class="num">08</span>File Messages<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <p style="margin:0">NONE SUPPLIED. No fraud alert, freeze notice, opt-out notice, or other consumer-file message appears in the extract. Nothing inferred.</p>
+    </div>
+  </section>
+
+  <section class="review" id="s9">
+    <h2><span class="num">09</span>Analyst Review<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <div class="verdict">
+        <div class="grade" id="grade"><div><div class="g">D+</div><div class="s">Grade</div></div></div>
+        <p class="vtext">
+          <b>Verdict</b>
+          Thin file, recently damaged, but genuinely clean underneath. The payment record on everything that
+          actually reported is spotless &mdash; that is the part worth protecting. The two blemishes are both
+          under two years old, which is the worst time for them to exist, and one still carries a live
+          $1,334 balance. No score was supplied, so this grade is read off file content alone.
+        </p>
+      </div>
+
+      <div class="subhead">What is working</div>
+      <ul class="pos">
+        <li><b>Zero delinquencies on three trade lines.</b> Chime reported 39 consecutive months clean. First Florida Credit Union ran to payoff with no lates. The new secured card is 15-for-15 since opening.</li>
+        <li><b>Nothing is currently past due except Verizon.</b> Both closed accounts landed at $0.</li>
+        <li><b>No public records.</b> No judgments, no bankruptcy, no liens, no tax filings.</li>
+        <li><b>No open disputes</b>, so nothing is in limbo and nothing needs adjudication.</li>
+        <li><b>All inquiries are finance-adjacent and most are one week.</b> Seven of eight landed 02.13.2025 &mdash; that is rate shopping, and most scoring models collapse it into a single hit.</li>
+      </ul>
+
+      <div class="subhead">What is ugly</div>
+      <ul class="neg">
+        <li><b>Depth is nearly nonexistent.</b> Five trade lines ever, three of them open, two of them secured. The largest revolving line this file has ever seen is $408. That reads as starter-tier across the board.</li>
+        <li><b>The Verizon charge-off is small and unpaid.</b> $1,334 sitting in collection, updated as recently as 10.09.2026, means it is still active and still being reported monthly. This is the single most expensive line on the file relative to its size.</li>
+        <li><b>The auto loan was settled short.</b> "Settled for less than full balance" plus a 60-day late on a $13,419 note tells the next lender the obligation was abandoned, not completed. That comment sticks for the full reporting window.</li>
+        <li><b>Both derogatories are recent.</b> 2024 and early 2025. New damage weighs heavier than aged damage, and neither has had time to fade.</li>
+        <li><b>Thin employment data.</b> Two employers, no hire dates, no income, no titles &mdash; not enough to establish stability on paper.</li>
+        <li><b>No mortgage, no auto, no prime bank card, no installment loan currently open.</b> Zero open non-revolving credit means a thin mix on top of a thin file.</li>
+      </ul>
+
+      <div class="subhead">Priority actions &mdash; click to mark done</div>
+      <ol class="act" id="acts">
+        <li><b>Resolve the Verizon balance first.</b> It is the only live debt and the cheapest possible win. Ask whether it is still with Verizon or placed with an agency, get the payoff in writing, and negotiate a deletion of the collection entry as part of the settlement if they will give it.</li>
+        <li><b>Do not dispute anything accurate.</b> The 30s and the settlement are real. Disputing them burns 30 to 45 days and changes nothing.</li>
+        <li><b>Grow the secured card, don't stack new ones.</b> Use it, let a small statement balance report, pay it in full. A card reporting $0 every month demonstrates nothing to a scoring model.</li>
+        <li><b>Freeze applications for six months.</b> The 09.21.2025 Capital One pull is the most recent. Let the file sit still and age.</li>
+        <li><b>Target one unsecured card next, not a second secured one.</b> A single non-secured approval moves this file out of starter territory faster than anything else available.</li>
+        <li><b>Get the "JR" suffix consistent.</b> Public records carry it, the bureau file does not. A suffix mismatch on an application is an easy reason for a manual review flag.</li>
+        <li><b>Watch the timeline.</b> Both derogatories fall off roughly seven years from their first delinquency, so around 2031 and 2032. Until then, recency is the enemy &mdash; every month without new damage improves standing.</li>
+      </ol>
+
+      <div class="subhead">Outlook</div>
+      <p style="margin:0">
+        Salvageable, and not far off. This is a young file with a short, correctable problem list &mdash; not a
+        structurally bad one. Clearing $1,334 and letting 18 clean months pass would move it from subprime
+        to respectable on its own. What it cannot survive is another collection or another settled loan.
+      </p>
+    </div>
+  </section>
+
+  <section id="s10">
+    <h2><span class="num">10</span>Dispute &amp; Contact Channels<button class="fold" aria-label="Toggle section">&#8722;</button></h2>
+    <div class="sec-body">
+      <ul>
+        <li>File a dispute: <a href="https://dispute.transunion.com">dispute.transunion.com</a></li>
+        <li>Bureau portal: <a href="https://www.transunion.com">www.transunion.com</a></li>
+        <li>Consumer Relations, PO Box 2000, Chester, PA 19016-2000 &middot; (800) 916-8800</li>
+        <li>Federal rights under FCRA: <a href="https://www.consumerfinance.gov/learnmore">consumerfinance.gov/learnmore</a></li>
+      </ul>
+      <p class="lead" style="margin:12px 0 0">Quote file number <button class="redact" id="copyNo" data-full="394019764">394019764</button> on any contact.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="stamps">
+      <span class="st red">Confidential</span>
+      <span class="st">Generated Extract</span>
+      <span class="st">Not An Original Bureau PDF</span>
+    </div>
+    Rendered from TransUnion-supplied data. Not independently verified. Absent fields are marked not supplied rather than reconstructed.
+  </footer>
+
+</div>
+
+<div id="lb" role="dialog" aria-label="Subject photograph">
+  <figure>
+    <img id="lbImg" alt="Subject photograph, enlarged">
+    <div class="ctl">
+      <button id="lbMono">Mono / Color</button>
+      <button id="lbClose">Close</button>
+    </div>
+  </figure>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = "dossier394019764";
+
+  /* ---------- toast ---------- */
+  var toastEl = document.getElementById("toast"), tT;
+  function toast(msg){
+    toastEl.textContent = msg; toastEl.classList.add("on");
+    clearTimeout(tT); tT = setTimeout(function(){ toastEl.classList.remove("on"); }, 1700);
+  }
+
+  /* ---------- progress bar ---------- */
+  var bar = document.getElementById("bar");
+  function prog(){
+    var h = document.documentElement.scrollHeight - innerHeight;
+    bar.style.width = (h > 0 ? (scrollY / h) * 100 : 0) + "%";
+  }
+  addEventListener("scroll", prog, {passive:true});
+  addEventListener("resize", prog);
+  prog();
+
+  /* ---------- collapsible sections ---------- */
+  document.querySelectorAll("h2").forEach(function(h){
+    h.addEventListener("click", function(e){
+      if(e.target.closest(".fold") === null && e.target.tagName === "A") return;
+      var sec = h.parentElement, f = h.querySelector(".fold");
+      sec.classList.toggle("collapsed");
+      if(f) f.innerHTML = sec.classList.contains("collapsed") ? "&#43;" : "&#8722;";
+    });
+  });
+  document.getElementById("expandAll").onclick = function(){
+    document.querySelectorAll("section").forEach(function(s){
+      s.classList.remove("collapsed");
+      var f = s.querySelector(".fold"); if(f) f.innerHTML = "&#8722;";
+    });
+    toast("All sections expanded");
+  };
+  document.getElementById("collapseAll").onclick = function(){
+    document.querySelectorAll("section").forEach(function(s){
+      s.classList.add("collapsed");
+      var f = s.querySelector(".fold"); if(f) f.innerHTML = "&#43;";
+    });
+    toast("All sections folded");
+    scrollTo({top:0, behavior:"smooth"});
+  };
+  document.getElementById("printBtn").onclick = function(){ print(); };
+
+  /* ---------- animated counters ---------- */
+  var seen = new WeakSet();
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(!en.isIntersecting || seen.has(en.target)) return;
+      seen.add(en.target);
+      var el = en.target, target = +el.dataset.count, pre = el.dataset.pre || "", t0 = null;
+      function step(ts){
+        if(!t0) t0 = ts;
+        var p = Math.min((ts - t0) / 700, 1), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = pre + Math.round(target * e).toLocaleString("en-US");
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }, {threshold:.4});
+  document.querySelectorAll("[data-count]").forEach(function(el){ io.observe(el); });
+
+  /* ---------- grade pop ---------- */
+  var grade = document.getElementById("grade");
+  new IntersectionObserver(function(e){
+    if(e[0].isIntersecting){ grade.classList.add("pop"); }
+  }, {threshold:.6}).observe(grade);
+
+  /* ---------- redaction reveal ---------- */
+  document.getElementById("ssn").addEventListener("click", function(){
+    var open = this.classList.toggle("open");
+    this.textContent = open ? this.dataset.full : "XXX-XX-1731";
+    toast(open ? "SSN revealed" : "SSN re-masked");
+  });
+  document.getElementById("copyNo").addEventListener("click", function(){
+    var n = this.dataset.full;
+    if(navigator.clipboard){ navigator.clipboard.writeText(n).then(function(){ toast("File number copied"); }); }
+    else toast("File number: " + n);
+  });
+
+  /* ---------- photo viewer ---------- */
+  var photo = document.getElementById("photo"), plate = document.getElementById("plate");
+  var lb = document.getElementById("lb"), lbImg = document.getElementById("lbImg");
+  lbImg.src = photo.getAttribute("src");
+  plate.addEventListener("click", function(){ lb.classList.add("on"); });
+  function closeLb(){ lb.classList.remove("on"); }
+  document.getElementById("lbClose").onclick = closeLb;
+  lb.addEventListener("click", function(e){ if(e.target === lb) closeLb(); });
+  function flipMono(){ lb.classList.toggle("color"); plate.classList.toggle("color"); }
+  document.getElementById("monoBtn").onclick = function(e){ e.stopPropagation(); flipMono(); };
+  document.getElementById("lbMono").onclick = flipMono;
+
+  /* ---------- register filter ---------- */
+  var recs = [].slice.call(document.querySelectorAll(".rec"));
+  var q = document.getElementById("q"), countEl = document.getElementById("count"),
+      emptyEl = document.getElementById("empty"), mode = "all";
+  recs.forEach(function(r){ r._txt = r.textContent.toLowerCase(); });
+
+  function applyFilter(){
+    var term = q.value.trim().toLowerCase(), shown = 0;
+    recs.forEach(function(r){
+      var ok = (mode === "all" || r.dataset.kind === mode) && (!term || r._txt.indexOf(term) > -1);
+      r.style.display = ok ? "" : "none";
+      if(ok) shown++;
+    });
+    countEl.textContent = shown + " / " + recs.length + " shown";
+    emptyEl.style.display = shown ? "none" : "block";
+  }
+  document.querySelectorAll("[data-filter]").forEach(function(b){
+    b.onclick = function(){
+      document.querySelectorAll("[data-filter]").forEach(function(x){ x.classList.remove("on"); });
+      b.classList.add("on"); mode = b.dataset.filter; applyFilter();
+    };
+  });
+  q.addEventListener("input", applyFilter);
+  applyFilter();
+
+  /* ---------- inquiry sort ---------- */
+  var inq = document.getElementById("inq"), asc = {};
+  inq.querySelectorAll("th.sortable").forEach(function(th){
+    th.addEventListener("click", function(){
+      var col = +th.dataset.col;
+      asc[col] = !asc[col];
+      inq.querySelectorAll("th.sortable").forEach(function(x){
+        x.classList.remove("sorted");
+        x.querySelector(".dir").innerHTML = "&#9650;";
+      });
+      th.classList.add("sorted");
+      th.querySelector(".dir").innerHTML = asc[col] ? "&#9650;" : "&#9660;";
+      var rows = [].slice.call(inq.tBodies[0].rows);
+      rows.sort(function(a, b){
+        var x = a.cells[col].textContent.trim(), y = b.cells[col].textContent.trim();
+        return asc[col] ? x.localeCompare(y) : y.localeCompare(x);
+      });
+      rows.forEach(function(r){ inq.tBodies[0].appendChild(r); });
+      toast("Sorted by " + th.textContent.replace(/[▲▼]/g,"").trim().toLowerCase());
+    });
+  });
+
+  /* ---------- checklist persistence ---------- */
+  var acts = [].slice.call(document.querySelectorAll("#acts li"));
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch(e){}
+  acts.forEach(function(li, i){
+    if(saved.indexOf(i) > -1) li.classList.add("done");
+    li.addEventListener("click", function(){
+      li.classList.toggle("done");
+      var on = acts.map(function(x, j){ return x.classList.contains("done") ? j : -1; })
+                    .filter(function(j){ return j > -1; });
+      try { localStorage.setItem(KEY, JSON.stringify(on)); } catch(e){}
+      toast(li.classList.contains("done") ? "Marked done (" + on.length + "/7)" : "Reopened");
+    });
+  });
+
+  /* ---------- keyboard ---------- */
+  addEventListener("keydown", function(e){
+    if(e.key === "Escape") closeLb();
+    if(e.key === "/" && document.activeElement !== q){ e.preventDefault(); q.focus(); }
+  });
+})();
+</script>
+</body>
+</html>
